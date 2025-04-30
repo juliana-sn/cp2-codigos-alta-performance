@@ -1,0 +1,3 @@
+4321, macarrao, 16.98, 4-26
+5342, vidro palmito, 9.45, 5-48
+6543, molho de tomate, 12.45, 4-88
