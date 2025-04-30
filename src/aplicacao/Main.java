@@ -52,6 +52,7 @@ public class Main {
         Encomenda encomenda = new Encomenda(id, nomeArquivo);
         filaEncomendas.enqueue(encomenda);
     }
+
     private static void atenderEncomenda() throws IOException {
         filaProdutos.init();
         Encomenda temp = filaEncomendas.dequeue();
@@ -73,19 +74,20 @@ public class Main {
             if (op != 1) {
                 filaProdutos.enqueue(aux);
                 cont++;
-                //System.out.println("Voltar depois para colocar no carrinho");//
+                System.out.println("Voltar depois para colocar no carrinho");
             } else {
-                    cont--;
-                    precoTotal += aux.getPreco();
+                cont--;
+                i--;
+                precoTotal += aux.getPreco();
             }
         }
 
-            System.out.println("Atendimento da encomenda foi finalizada com sucesso");
-            System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal));
-        }
+        System.out.println("Atendimento da encomenda foi finalizada com sucesso");
+        System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal));
+    }
 
     private static void geraEncomenda(String arquivo) throws IOException {
-        String path = "C:\\Users\\Juliana\\OneDrive\\Área de Trabalho\\cp_codigos\\src\\arquivos\\" + arquivo;
+        String path = "C:\\Users\\Lucas\\IdeaProjects\\cp2-codigos-alta-performance\\src\\arquivos\\" + arquivo;
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         String linha = "";
         linha = buffRead.readLine();
