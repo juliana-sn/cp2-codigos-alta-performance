@@ -6,6 +6,7 @@ import filas.FilaEncomendas;
 import filas.FilaProdutos;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -54,36 +55,43 @@ public class Main {
     }
 
     private static void atenderEncomenda() throws IOException {
-        filaProdutos.init();
-        Encomenda temp = filaEncomendas.dequeue();
-        System.out.println("Atendimento do cliente " + temp.getClienteID() + " está iniciando");
 
-        String arquivo = temp.getNomeArquivo();
 
-        geraEncomenda(arquivo);
+        try {
+            filaProdutos.init();
+            Encomenda temp = filaEncomendas.dequeue();
 
-        int cont = filaProdutos.cont;
+            String arquivo = temp.getNomeArquivo();
 
-        double precoTotal = 0;
-        for (int i = 0; i < cont; i++) {
-            int op;
-            Produto aux = filaProdutos.dequeue();
-            System.out.println("Produto [codigo= " + aux.getCodigo() + ", descricao= " + aux.getDescricao() + ", preco= " + aux.getPreco() + ", localizacao= " + aux.getLocalizacao() + "]");
-            System.out.println("O produto foi encontrado na prateira? (1-sim):");
-            op = sc.nextInt();
-            if (op != 1) {
-                filaProdutos.enqueue(aux);
-                cont++;
-                System.out.println("Voltar depois para colocar no carrinho");
-            } else {
-                cont--;
-                i--;
-                precoTotal += aux.getPreco();
+            geraEncomenda(arquivo);
+
+            System.out.println("Atendimento do cliente " + temp.getClienteID() + " está iniciando");
+
+            int cont = filaProdutos.cont;
+
+            double precoTotal = 0;
+            for (int i = 0; i < cont; i++) {
+                int op;
+                Produto aux = filaProdutos.dequeue();
+                System.out.println("Produto [codigo= " + aux.getCodigo() + ", descricao= " + aux.getDescricao() + ", preco= " + aux.getPreco() + ", localizacao= " + aux.getLocalizacao() + "]");
+                System.out.println("O produto foi encontrado na prateira? (1-sim):");
+                op = sc.nextInt();
+                if (op != 1) {
+                    filaProdutos.enqueue(aux);
+                    cont++;
+                    System.out.println("Voltar depois para colocar no carrinho");
+                } else {
+                    cont--;
+                    i--;
+                    precoTotal += aux.getPreco();
+                }
             }
-        }
 
-        System.out.println("Atendimento da encomenda foi finalizada com sucesso");
-        System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal));
+            System.out.println("Atendimento da encomenda foi finalizada com sucesso");
+            System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal));
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado" + e.getMessage());
+        }
     }
 
     private static void geraEncomenda(String arquivo) throws IOException {
