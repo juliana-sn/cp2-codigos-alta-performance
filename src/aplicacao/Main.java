@@ -41,6 +41,7 @@ public class Main {
                     break;
             }
         } while (op != 0);
+        System.out.println("Atendimento finalizado");
     }
 
     private static void inserirEncomenda() {
@@ -55,16 +56,14 @@ public class Main {
     }
 
     private static void atenderEncomenda() throws IOException {
+        filaProdutos.init();
+        Encomenda temp = filaEncomendas.dequeue();
 
+        String arquivo = temp.getNomeArquivo();
 
-        try {
-            filaProdutos.init();
-            Encomenda temp = filaEncomendas.dequeue();
+        boolean check = geraEncomenda(arquivo);
 
-            String arquivo = temp.getNomeArquivo();
-
-            geraEncomenda(arquivo);
-
+        if (!check) {
             System.out.println("Atendimento do cliente " + temp.getClienteID() + " está iniciando");
 
             int cont = filaProdutos.cont;
@@ -89,34 +88,39 @@ public class Main {
 
             System.out.println("Atendimento da encomenda foi finalizada com sucesso");
             System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal));
-        } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado" + e.getMessage());
         }
     }
 
-    private static void geraEncomenda(String arquivo) throws IOException {
-        String path = "C:\\Users\\Lucas\\IdeaProjects\\cp2-codigos-alta-performance\\src\\arquivos\\" + arquivo;
-        BufferedReader buffRead = new BufferedReader(new FileReader(path));
-        String linha = "";
-        linha = buffRead.readLine();
-        String texto = "";
-
-        while (true) {
-            if (linha != null) {
-                texto = linha;
-                String[] campos = texto.split(",");
-
-                String codigo = campos[0];
-                String descricao = campos[1];
-                double preco = Double.parseDouble(campos[2]);
-                String localizacao = campos[3];
-
-                Produto produto = new Produto(codigo, descricao, preco, localizacao);
-                filaProdutos.enqueue(produto);
-            } else
-                break;
+    private static boolean geraEncomenda(String arquivo) throws IOException {
+        boolean check = false;
+        try {
+            String path = "C:\\Users\\Lucas\\IdeaProjects\\cp2-codigos-alta-performance\\src\\arquivos\\" + arquivo;
+            BufferedReader buffRead = new BufferedReader(new FileReader(path));
+            String linha = "";
             linha = buffRead.readLine();
+            String texto = "";
+
+            while (true) {
+                if (linha != null) {
+                    texto = linha;
+                    String[] campos = texto.split(",");
+
+                    String codigo = campos[0];
+                    String descricao = campos[1];
+                    double preco = Double.parseDouble(campos[2]);
+                    String localizacao = campos[3];
+
+                    Produto produto = new Produto(codigo, descricao, preco, localizacao);
+                    filaProdutos.enqueue(produto);
+                } else
+                    break;
+                linha = buffRead.readLine();
+            }
+            buffRead.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado" + e.getMessage());
+            check = true;
         }
-        buffRead.close();
+        return check;
     }
 }
