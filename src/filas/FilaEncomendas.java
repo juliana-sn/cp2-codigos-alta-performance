@@ -1,13 +1,15 @@
 package filas;
 
-import modelos.Encomenda;
+import entidades.Encomenda;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class FilaEncomendas {
     static final int N = 4;
     public Encomenda[] encomendas = new Encomenda[N];
-    int ini, fim, cont;
+    int ini;
+    int fim;
+    public int cont;
 
     public void init() {
         ini = 0;

@@ -1,4 +1,4 @@
-package modelos;
+package entidades;
 
 public class Encomenda {
     private int clienteID;

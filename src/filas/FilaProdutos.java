@@ -1,6 +1,6 @@
 package filas;
 
-import modelos.Produto;
+import entidades.Produto;
 
 public class FilaProdutos {
 

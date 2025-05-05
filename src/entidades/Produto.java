@@ -1,4 +1,4 @@
-package modelos;
+package entidades;
 
 public class Produto {
     private String codigo;
