@@ -14,19 +14,17 @@ public class Distribuidor {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String args[]) throws IOException {
-
         filaEncomendas.init();
         geraFilaEncomendas(filaEncomendas);
+
         int op = 0;
         do {
             System.out.println("0 - Encerra o atendimento\n1 - Insere nova encomenda na fila de encomendas\n2 - Atende uma encomenda");
             op = sc.nextInt();
 
-            if (op < 0 || op > 2) {
-                System.out.println("Opção inválida!");
-            }
-
             switch (op) {
+                case 0:
+                    break;
                 case 1:
                     inserirEncomenda();
                     break;
@@ -37,8 +35,11 @@ public class Distribuidor {
                         atenderEncomenda();
                     }
                     break;
+                default:
+                    System.out.println("Opção inválida!");
             }
         } while (op != 0);
+        System.out.println("Atendimento finalizado");
     }
 
     private static void inserirEncomenda() {
@@ -59,12 +60,12 @@ public class Distribuidor {
         String arquivo = temp.getNomeArquivo();
         boolean check = geraFilaProdutos(filaProdutos, arquivo);
 
-        if (check){
+        if (check) {
             System.out.println("Atendimento do cliente " + temp.getClienteID() + " está iniciando");
 
             int cont = filaProdutos.cont;
-
             double precoTotal = 0;
+
             for (int i = 0; i < cont; i++) {
                 int op;
                 Produto aux = filaProdutos.dequeue();
@@ -74,7 +75,6 @@ public class Distribuidor {
                 if (op != 1) {
                     filaProdutos.enqueue(aux);
                     cont++;
-                    System.out.println("Voltar depois para colocar no carrinho");
                 } else {
                     cont--;
                     i--;
@@ -82,17 +82,17 @@ public class Distribuidor {
                 }
             }
             System.out.println("Atendimento da encomenda foi finalizada com sucesso");
-            System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal));
+            System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal) + "\n");
         }else{
             System.out.println("Arquivo de encomenda não presente");
         }
-}
+    }
 
     private static boolean geraFilaProdutos(FilaProdutos filaProd, String arquivo) throws IOException {
         boolean check = true;
         try{
-            String path = "C:\\Users\\Juliana\\OneDrive\\Área de Trabalho\\cp_codigos\\src\\arquivos\\" + arquivo;
-            BufferedReader buffRead = new BufferedReader(new FileReader(path));
+            String caminhoArquivo = "C:\\Users\\Juliana\\OneDrive\\Área de Trabalho\\cp_codigos\\src\\arquivos\\" + arquivo;
+            BufferedReader buffRead = new BufferedReader(new FileReader(caminhoArquivo));
             String linha = "";
             linha = buffRead.readLine();
             String texto = "";
@@ -115,31 +115,29 @@ public class Distribuidor {
             }
             buffRead.close();
         }catch (FileNotFoundException e){
-            System.out.print("Arquivo não encontrado: " + e.getMessage() + "\n(O Sistema não pode encontrar o arquivo especificado)");
+            System.out.println("Arquivo não encontrado: " + e.getMessage());
             check = false;
         }
 
         return check;
     }
 
-    private static void geraFilaEncomendas(FilaEncomendas fila){
+    private static void geraFilaEncomendas(FilaEncomendas fila) {
         String caminhoDoArquivo = "C:\\Users\\Juliana\\OneDrive\\Área de Trabalho\\cp_codigos\\src\\arquivos\\ListaEncomendas.txt";
-        try{
+        try {
             File arquivo = new File(caminhoDoArquivo);
 
             Scanner leArq = new Scanner(arquivo);
 
-            while(leArq.hasNextLine()){
+            while (leArq.hasNextLine()) {
                 String linha = leArq.nextLine();
                 String[] partes = linha.split(",");
                 Encomenda obj = new Encomenda(Integer.parseInt(partes[0]), partes[1]);
-                System.out.println(obj);
-                System.out.println();
                 fila.enqueue(obj);
             }
             leArq.close();
         } catch (FileNotFoundException e) {
-            System.out.print("Arquivo não encontrado: " + e.getMessage());
+            System.out.println("Arquivo não encontrado: " + e.getMessage());
         }
     }
 }
