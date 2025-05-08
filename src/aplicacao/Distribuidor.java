@@ -73,6 +73,7 @@ public class Distribuidor {
                 System.out.println("O produto foi encontrado na prateira? (1-sim):");
                 op = sc.nextInt();
                 if (op != 1) {
+                    System.out.println("Voltar depois para colocar no carrinho");
                     filaProdutos.enqueue(aux);
                     cont++;
                 } else {
@@ -84,14 +85,15 @@ public class Distribuidor {
             System.out.println("Atendimento da encomenda foi finalizada com sucesso");
             System.out.println("Valor total da compra: R$" + String.format("%.2f", precoTotal) + "\n");
         }else{
-            System.out.println("Arquivo de encomenda não presente");
+            System.out.println("(O sistema não pode encontrar o arquivo especificado)\n");
+            System.out.println("Arquivo de encomenda não presente\n");
         }
     }
 
     private static boolean geraFilaProdutos(FilaProdutos filaProd, String arquivo) throws IOException {
         boolean check = true;
         try{
-            String caminhoArquivo = "C:\\Users\\Juliana\\OneDrive\\Área de Trabalho\\cp_codigos\\src\\arquivos\\" + arquivo;
+            String caminhoArquivo = "C:\\Users\\labsfiap\\IdeaProjects\\cp2-codigos-alta-performance\\src\\arquivos\\" + arquivo;
             BufferedReader buffRead = new BufferedReader(new FileReader(caminhoArquivo));
             String linha = "";
             linha = buffRead.readLine();
@@ -123,7 +125,7 @@ public class Distribuidor {
     }
 
     private static void geraFilaEncomendas(FilaEncomendas fila) {
-        String caminhoDoArquivo = "C:\\Users\\Juliana\\OneDrive\\Área de Trabalho\\cp_codigos\\src\\arquivos\\ListaEncomendas.txt";
+        String caminhoDoArquivo = "C:\\Users\\labsfiap\\IdeaProjects\\cp2-codigos-alta-performance\\src\\arquivos\\ListaEncomendas.txt";
         try {
             File arquivo = new File(caminhoDoArquivo);
 
